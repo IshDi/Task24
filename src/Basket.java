@@ -1,14 +1,13 @@
 import java.io.*;
-
 public class Basket {
     protected int[] pricesProduct;
     protected String[] namesProduct;
-    protected static int[] basketShop;
+    protected int[] basketShop;
 
-    public Basket(int[] pricesProduct, String[] namesProduct) {
+    public Basket(int[] pricesProduct, String[] namesProduct, int[] basketShop) {
         this.pricesProduct = pricesProduct;
         this.namesProduct = namesProduct;
-        this.basketShop = new int[pricesProduct.length];
+        this.basketShop = basketShop;
     }
 
     public String[] getNamesProduct() {
@@ -43,6 +42,14 @@ public class Basket {
 
     public void saveTxt(File textFile) throws IOException {
         try (PrintWriter out = new PrintWriter(textFile)) {
+            for (int price : pricesProduct) {
+                out.print(price + " ");
+            }
+            out.print("\n");
+            for (String name : namesProduct) {
+                out.print(name + " ");
+            }
+            out.print("\n");
             for (int arr : basketShop) {
                 out.print(arr + " ");
             }
@@ -50,19 +57,32 @@ public class Basket {
     }
 
     static Basket loadFromTxtFile(File textFile) throws IOException {
-        try (InputStream inputStream = new FileInputStream(textFile)) {
-            int currentByte = 0;
-            int i = 0;
-            String s;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(textFile))) {
+            String[] pricesString = bufferedReader
+                    .readLine()
+                    .split(" ");
 
-            while ((currentByte = inputStream.read()) != -1) {
-                s = Character.toString((char) currentByte);
-                if (!s.equals(" ")) {
-                    Basket.basketShop[i] = Integer.parseInt(Character.toString(currentByte));
-                    i++;
-                }
+            int[] price = new int[pricesString.length];
+
+            for(int i = 0; i < pricesString.length; i++) {
+                price[i] = Integer.parseInt(pricesString[i]);
             }
+
+            String[] names = bufferedReader
+                    .readLine()
+                    .split(" ");
+
+            String[] basketString = bufferedReader
+                    .readLine()
+                    .split(" ");
+
+            int[] basket = new int[basketString.length];
+
+            for(int i = 0; i < basketString.length; i++) {
+                basket[i] = Integer.parseInt(basketString[i]);
+            }
+
+            return new Basket(price, names, basket);
         }
-        return null;
     }
 }

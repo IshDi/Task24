@@ -1,7 +1,5 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Scanner;
 
 public class Main {
@@ -14,18 +12,18 @@ public class Main {
         String[] fruit = {"Банан", "Апельсин", "Груша", "Арбуз", "Слива"};
         File file = new File("./basket.txt");
 
-        Basket basket = new Basket(prices, fruit);
-
-        System.out.printf("%s \n", textStart);
-        for (int i = 0; i < basket.getNamesProduct().length; i++) {
-            System.out.printf("%d. %s %d руб/шт \n", i + 1, basket.getNamesProduct()[i], basket.getPricesProduct()[i]);
-        }
+        Basket basket = null;
 
         while (true) {
             if (file.exists()) {
-                basket.loadFromTxtFile(file);
+                basket = basket.loadFromTxtFile(file);
             } else {
                 file.createNewFile();
+                basket = new Basket(prices, fruit, new int[prices.length]);
+            }
+            System.out.printf("%s \n", textStart);
+            for (int i = 0; i < basket.getNamesProduct().length; i++) {
+                System.out.printf("%d. %s %d руб/шт \n", i + 1, basket.getNamesProduct()[i], basket.getPricesProduct()[i]);
             }
             System.out.printf("%s \n", textOption);
             String input = scanner.nextLine();
