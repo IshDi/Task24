@@ -3,20 +3,20 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
         String textStart = "Список возможных товаров для покупки:";
         String textOption = "Выберите товар и количество или введите `end`";
 
         int[] prices = {80, 100, 75, 200, 150};
         String[] fruit = {"Банан", "Апельсин", "Груша", "Арбуз", "Слива"};
-        File file = new File("./basket.txt");
+        File file = new File("./basket.bin");
 
         Basket basket = null;
 
         while (true) {
             if (file.exists()) {
-                basket = basket.loadFromTxtFile(file);
+                basket = basket.loadFromBinFile(file);
             } else {
                 file.createNewFile();
                 basket = new Basket(prices, fruit, new int[prices.length]);
@@ -33,7 +33,7 @@ public class Main {
             }
             String[] data = input.split(" ");
             basket.addToCart(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
-            basket.saveTxt(file);
+            basket.saveBin(file);
         }
     }
 }
