@@ -10,9 +10,11 @@ public class Main {
 
         int[] prices = {80, 100, 75, 200, 150};
         String[] fruit = {"Банан", "Апельсин", "Груша", "Арбуз", "Слива"};
-        File file = new File("./basket.txt");
+        File file = new File("./basket.json");
+        File fileLog = new File("./log.csv");
 
         Basket basket = null;
+        ClientLog clLog = new ClientLog();
 
         while (true) {
             if (file.exists()) {
@@ -29,10 +31,12 @@ public class Main {
             String input = scanner.nextLine();
             if (input.equals("end")) {
                 basket.printCart();
+                clLog.exportAsCSV(fileLog);
                 break;
             }
             String[] data = input.split(" ");
             basket.addToCart(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+            clLog.log(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
             basket.saveTxt(file);
         }
     }
